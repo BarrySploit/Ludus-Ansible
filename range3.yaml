@@ -2,8 +2,8 @@ ludus:
   - vm_name: "velociraptor-server"
     hostname: "velociraptor-server"
     template: ubuntu-20.04-x64-server-template
-    vlan: 10
-    ip_last_octet: 13
+    vlan: 20
+    ip_last_octet: 3
     ram_gb: 8
     cpus: 4
     linux: true
@@ -40,7 +40,7 @@ ludus:
     roles:
       - aleemladha.ludus_wazuh_agent
       - polluxtroy3758.ludus_sysmon
-      - ansible_velociraptor-
+      - ansible_velociraptor-main
       - VelClientWinConfig
     role_vars:
       velociraptor_client: true

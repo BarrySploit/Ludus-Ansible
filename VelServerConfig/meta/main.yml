@@ -1,0 +1,33 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: ludus_velociraptor_server_config
+  author: BarrySploit
+  description: Ansible Role for applying pre-configured server config file.
+  company: ''
+  license: GPLv3
+  min_ansible_version: "2.10"
+  platforms:
+    # Modify the platforms here as required
+    # This example includes a lot, see https://github.com/ansible/ansible-lint/blob/main/src/ansiblelint/schemas/meta.json for all possibilities
+    - name: Windows 
+      versions:
+        - "2012R2"
+        - "2016"
+        - "2019"
+        - "2022"
+    - name: Debian
+      versions:
+        - all
+        - bullseye
+        - bookworm
+    - name: Ubuntu
+      versions:
+        - all
+        - focal
+        - jammy
+  galaxy_tags:
+    - tagswithnospaces
+
+collections: [] # Add any collections needed here

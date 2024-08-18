@@ -1,0 +1,145 @@
+ludus:
+  - vm_name: "velociraptor-server"
+    hostname: "velociraptor-server"
+    template: ubuntu-20.04-x64-server-template
+    vlan: 10
+    ip_last_octet: 13
+    ram_gb: 8
+    cpus: 4
+    linux: true
+    roles:
+      - ansible_velociraptor-main
+      - VelServerConfig
+    role_vars:
+      velociraptor_admin_password: "Velociraptor123"
+      velociraptor_server: true
+  - vm_name: "barry-wazuh-siem"
+    hostname: "barry-wazuh-siem"
+    template: kali-x64-desktop-template
+    vlan: 20
+    ip_last_octet: 2
+    ram_gb: 8
+    cpus: 4
+    linux: true
+    testing:
+      snapshot: false
+      block_internet: false
+    roles:
+      - aleemladha.wazuh_server_install
+    role_vars:
+      wazuh_admin_password: Wazuh-123
+  - vm_name: "barry-GOAD-DC01"
+    hostname: "barry-DC01"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 10
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    roles:
+      - aleemladha.ludus_wazuh_agent
+      - polluxtroy3758.ludus_sysmon
+      - ansible_velociraptor-
+      - VelClientWinConfig
+    role_vars:
+      velociraptor_client: true
+  - vm_name: "barry-GOAD-DC02"
+    hostname: "barry-DC02"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 11
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    roles:
+      - aleemladha.ludus_wazuh_agent
+      - polluxtroy3758.ludus_sysmon
+      - ansible_velociraptor-main
+      - VelClientWinConfig
+    role_vars:
+      velociraptor_client: true
+    domain:
+      fqdn: north.sevenkingdoms.local
+      role: primary-dc
+  - vm_name: "barry-GOAD-DC03"
+    hostname: "barry-DC03"
+    template: win2016-server-x64-template
+    vlan: 10
+    ip_last_octet: 12
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    roles:
+      - aleemladha.ludus_wazuh_agent
+      - polluxtroy3758.ludus_sysmon
+      - ansible_velociraptor-main
+      - VelClientWinConfig
+    role_vars:
+      velociraptor_client: true
+  - vm_name: "barry-GOAD-SRV02"
+    hostname: "barry-SRV02"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 22
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    roles:
+      - aleemladha.ludus_wazuh_agent
+      - polluxtroy3758.ludus_sysmon
+      - ansible_velociraptor-main
+      - VelClientWinConfig
+    role_vars:
+      velociraptor_client: true
+  - vm_name: "barry-GOAD-SRV03"
+    hostname: "barry-SRV03"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 23
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    roles:
+      - aleemladha.ludus_wazuh_agent
+      - polluxtroy3758.ludus_sysmon
+      - ansible_velociraptor-main
+      - VelClientWinConfig
+    role_vars:
+      velociraptor_client: true
+  - vm_name: "barry-ad-win11-22h2-enterprise-x64-1"
+    hostname: "barry-WIN11-22H2-1"
+    template: win11-22h2-x64-enterprise-template
+    vlan: 10
+    ip_last_octet: 21
+    ram_gb: 8
+    cpus: 4
+    windows:
+      install_additional_tools: true
+      office_version: 2019
+      office_arch: 64bit
+    domain:
+      fqdn: north.sevenkingdoms.local
+      role: member
+    roles:
+      - aleemladha.ludus_wazuh_agent
+      - polluxtroy3758.ludus_sysmon
+      - ansible_velociraptor-main
+      - VelClientWinConfig
+    role_vars:
+      velociraptor_client: true
+  - vm_name: "barry-kali"
+    hostname: "barry-kali"
+    template: kali-x64-desktop-template
+    vlan: 10
+    ip_last_octet: 99
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    testing:
+      snapshot: false
+      block_internet: false

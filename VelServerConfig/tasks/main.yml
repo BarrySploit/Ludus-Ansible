@@ -1,0 +1,9 @@
+- name: DownloadConfig
+  ansible.builtin.get_url:
+    dest: /etc/Velociraptor/server.config.yaml
+    url: https://raw.githubusercontent.com/BarrySploit/Ludus-Ansible/main/server.config.yaml
+    force: true
+- name: RestartSvc
+  ansible.builtin.service:
+    name: velociraptor
+    state: restarted

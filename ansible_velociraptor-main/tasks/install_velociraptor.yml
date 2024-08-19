@@ -1,0 +1,32 @@
+---
+- name: "Install & Configure Server"
+  ansible.builtin.import_tasks: install/install_server.yml
+  when:
+    - velociraptor_server|bool
+  tags:
+    - install
+
+- name: "Install & Configure Linux Client"
+  ansible.builtin.import_tasks: install/install_linux_client.yml
+  when:
+    - velociraptor_client|bool
+    - ansible_os_family != "Windows"
+    - ansible_os_family != "Darwin"
+  tags:
+    - install
+
+- name: "Install & Configure Mac Client"
+  ansible.builtin.import_tasks: install/install_mac_client.yml
+  when:
+    - velociraptor_client|bool
+    - ansible_os_family == "Darwin"
+  tags:
+    - install
+
+- name: "Install & Configure Windows Client"
+  ansible.builtin.import_tasks: install/install_windows_client.yml
+  when:
+    - velociraptor_client|bool
+    - ansible_os_family == "Windows"
+  tags:
+    - install

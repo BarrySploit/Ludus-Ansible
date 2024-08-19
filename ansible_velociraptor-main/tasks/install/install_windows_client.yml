@@ -1,0 +1,31 @@
+---
+- name: "Windows Client | Create directory"
+  ansible.windows.win_file:
+    path: "{{ _velociraptor_windows_dir }}"
+    state: directory
+- name: "Windows Client | Get velociraptor msi"
+  ansible.windows.win_get_url:
+    url: "{{ velociraptor_url }}"
+    dest: "{{ _velociraptor_windows_dir }}{{ velociraptor_msi }}"
+- name: "Windows Client | Install velociraptor msi"
+  ansible.windows.win_package:
+    path: "{{ _velociraptor_windows_dir }}{{ velociraptor_msi }}"
+    state: present
+- name: "DownloadVelConfig"
+  ansible.windows.win_get_url:
+    dest: "C:\\Program Files\\Velociraptor\\client.config.yaml"
+    url: "https://raw.githubusercontent.com/BarrySploit/Ludus-Ansible/main/client.config.yaml"
+    force: true
+- name: "RestartVelSvc"
+  win_service:
+    name: "Velociraptor Service"
+    state: restarted
+- name: "DownloadWazuhConfig"
+  ansible.windows.win_get_url:
+    dest: "C:\Program Files (x86)\ossec-agent\ossec.conf"
+    url: "https://raw.githubusercontent.com/BarrySploit/Ludus-Ansible/main/ossec.conf"
+    force: true
+- name: "RestartWazuhSvc"
+  win_service:
+    name: "Wazuh"
+    state: restarted

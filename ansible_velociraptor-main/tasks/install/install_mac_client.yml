@@ -1,0 +1,46 @@
+---
+- name: "Install MacOS Client | Create Velociraptor directories"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0750'
+  with_items:
+    - "{{ velociraptor_dir }}"
+    - "{{ velociraptor_config_dir }}"
+
+- name: "Install MacOS Client | Download velociraptor binary"
+  ansible.builtin.get_url:
+    url: "{{ velociraptor_url }}"
+    dest: "{{ velociraptor_dir }}/velociraptor"
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: "Install MacOS Client | Copy velociraptor client config"
+  ansible.builtin.copy:
+    dest: "{{ velociraptor_config_dir }}/client.config.yaml"
+    src: client.config.yaml
+    owner: root
+    group: root
+    mode: '0640'
+  notify:
+    - Restart velociraptor nix client
+
+- name: "Install MacOS Client | Install velociraptor systemd configuration"
+  ansible.builtin.template:
+    src: systemd-velociraptor-client.service.j2
+    dest: /lib/systemd/system/velociraptor-client.service
+    owner: root
+    group: root
+    mode: '0644'
+  register: systemd
+  notify:
+    - Reload velociraptor-client
+
+- name: "Install MacOS Client | Enable and start velociraptor-client systemd service"
+  ansible.builtin.service:
+    name: velociraptor-client
+    enabled: true
+    state: 'started'

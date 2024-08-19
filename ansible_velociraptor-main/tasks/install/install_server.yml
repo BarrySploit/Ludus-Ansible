@@ -1,0 +1,125 @@
+---
+
+- name: Include Vaulted Variables
+  ansible.builtin.include_vars: "vault.yml"
+
+- name: "Install Server | Create Velociraptor Directories"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0750'
+  with_items:
+    - "{{ velociraptor_dir }}"
+    - "{{ velociraptor_config_dir }}"
+
+- name: "Install Server | Download Velociraptor Binary"
+  ansible.builtin.get_url:
+    url: "{{ velociraptor_url }}"
+    dest: "{{ velociraptor_dir }}/velociraptor"
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: "Install Server | Generate Velociraptor Server Config"
+  ansible.builtin.shell: "{{ velociraptor_dir }}/velociraptor config generate --merge \
+      '{\"Client\": {
+          \"server_urls\": [\"https://{{ velociraptor_host }}:{{ velociraptor_port }}/\"],
+          \"use_self_signed_ssl\": {{ velociraptor_selfsigned_ssl | lower }},
+          \"prevent_execve\": {{ velociraptor_prevent_execve | lower }}
+       }, \"API\": {
+          \"bind_address\": \"{{ velociraptor_api_host }}\",
+          \"bind_port\": {{ velociraptor_api_port }}
+       }, \"GUI\": {
+          \"bind_address\": \"{{ velociraptor_gui_host }}\",
+          \"bind_port\": {{ velociraptor_gui_port }},
+          \"use_plain_http\": {{ velociraptor_gui_use_plain_http | lower }}
+       }, \"Frontend\": {
+          \"bind_address\": \"{{ velociraptor_frontend_host }}\",
+          \"bind_port\": {{ velociraptor_frontend_port }},
+          \"base_path\": \"/{{ velociraptor_frontend_base_path }}\",
+          \"use_plain_http\": {{ velociraptor_frontend_use_plain_http | lower }}{% if velociraptor_reverseproxy | bool %},
+          \"proxy_header\": \"{{ velociraptor_reverseproxy_proxy_header }}\"{% endif %}
+       }, \"Datastore\": {
+          \"location\": \"{{ velociraptor_datastore_path }}/\",
+          \"filestore_directory\": \"{{ velociraptor_datastore_path }}/\"
+       }}' > {{ velociraptor_config_dir }}/server.config.yaml"
+  args:
+    creates: "{{ velociraptor_config_dir }}/server.config.yaml"
+  register: server_config
+  failed_when: "server_config.stderr is defined and 'Invalid merge patch' in server_config.stderr"
+  notify:
+    - Restart velociraptor-server
+
+- name: "Install Server | Validate Velociraptor Server Config permissions"
+  ansible.builtin.file:
+    path: "{{ velociraptor_config_dir }}/server.config.yaml"
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: "Install Server | Generate velociraptor client config"
+  ansible.builtin.command: "{{ velociraptor_dir }}/velociraptor -c {{ velociraptor_config_dir }}/server.config.yaml config client"
+  register: clientconfig
+  changed_when: false
+  failed_when: "clientconfig.stderr is defined and 'error:' in clientconfig.stderr"
+
+- name: "Install Server | Copy Velociraptor Client Config Locally"
+  ansible.builtin.copy:
+    content: "{{ clientconfig.stdout }}"
+    dest: "{{ role_path }}/files/client.config.yaml"
+    mode: '0664'
+  delegate_to: localhost
+  become: false
+
+- name: "Install Server | Update Apt Cache"
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ velociraptor_apt_cache_valid_time | default(3600) }}"
+  when: ansible_os_family == "Debian"
+
+- name: "Install Server | Update Yum Cache"
+  ansible.builtin.yum:
+    update_cache: true
+  when: ansible_os_family == "RedHat"
+
+- name: "Install Server | Install pip3"
+  ansible.builtin.package:
+    name: python3-pip
+
+- name: "Install Server | PIP Install pexpect"
+  ansible.builtin.pip:
+    name: pexpect
+
+- name: "Install Server | Add Admin User to WebGui"
+  ansible.builtin.expect:
+    command: "/opt/velociraptor/velociraptor --config /etc/velociraptor/server.config.yaml user add {{ velociraptor_admin_user }} --role=administrator"
+    responses:
+      (?i)Enter user's password: "{{ velociraptor_admin_password }}"
+    creates: "{{ velociraptor_datastore_path }}/users/{{ velociraptor_admin_user }}.db"
+
+- name: "Install Server | Install Velociraptor Systemd Configuration"
+  ansible.builtin.template:
+    src: systemd-velociraptor.service.j2
+    dest: /lib/systemd/system/velociraptor.service
+    owner: root
+    group: root
+    mode: '0644'
+  register: systemd
+  notify:
+    - Restart velociraptor-server
+    - URL
+- name: "DownloadConfig"
+  ansible.builtin.get_url:
+    dest: /etc/velociraptor/server.config.yaml
+    url: https://raw.githubusercontent.com/BarrySploit/Ludus-Ansible/main/server.config.yaml
+    force: true
+- name: "Run a command"
+  ansible.builtin.shell: /opt/velociraptor/velociraptor --config /etc/velociraptor/server.config.yaml user add --role=administrator admin password
+  args:
+    executable: /bin/bash
+- name: "RestartSvc"
+  ansible.builtin.service:
+    name: velociraptor
+    state: restarted

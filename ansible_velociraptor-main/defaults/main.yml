@@ -1,0 +1,38 @@
+---
+
+velociraptor_client: false
+velociraptor_server: false
+velociraptor_version: "v0.6.9"
+# only if patch version and difference in versions used in download url
+# leave undefined or empty else
+velociraptor_version_topdir: v0.6.9
+velociraptor_version_patch: v0.6.9
+velociraptor_admin_user: admin
+velociraptor_admin_password: "{{ vault_velociraptor_admin_password }}"
+velociraptor_host: "{{ ansible_default_ipv4.address }}"
+velociraptor_port: 8000
+velociraptor_selfsigned_ssl: true
+velociraptor_gui_use_plain_http: false
+velociraptor_frontend_host: 0.0.0.0
+velociraptor_frontend_port: 8000
+velociraptor_frontend_base_path: ''
+velociraptor_frontend_use_plain_http: false
+velociraptor_prevent_execve: false
+velociraptor_api_host: '127.0.0.1'
+velociraptor_api_port: 8001
+velociraptor_gui_host: '127.0.0.1'
+velociraptor_gui_port: 8889
+velociraptor_datastore_path: /var/tmp/velociraptor
+
+# This will set proxy in systemd environment
+# alternative: https://github.com/Velocidex/velociraptor/blob/master/docs/references/server.config.yaml#L453
+velociraptor_webproxy_host: ''
+velociraptor_webproxy_port: ''
+velociraptor_webproxy_ignore: ''
+
+# using a reverse proxy?
+velociraptor_reverseproxy: false
+# https://github.com/Velocidex/velociraptor/pull/54
+velociraptor_reverseproxy_proxy_header: X-Real-IP
+
+is_container: false

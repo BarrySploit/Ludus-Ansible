@@ -1,0 +1,6 @@
+---
+- name: Unix velociraptor playbook
+  hosts: all
+  become: true
+  roles:
+    - prymalinstynct.velociraptor

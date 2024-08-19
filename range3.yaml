@@ -9,7 +9,6 @@ ludus:
     linux: true
     roles:
       - ansible_velociraptor-main
-      - VelServerConfig
     role_vars:
       velociraptor_admin_password: "Velociraptor123"
       velociraptor_server: true
@@ -41,7 +40,6 @@ ludus:
       - aleemladha.ludus_wazuh_agent
       - polluxtroy3758.ludus_sysmon
       - ansible_velociraptor-main
-      - VelClientWinConfig
     role_vars:
       velociraptor_client: true
   - vm_name: "barry-GOAD-DC02"
@@ -57,7 +55,6 @@ ludus:
       - aleemladha.ludus_wazuh_agent
       - polluxtroy3758.ludus_sysmon
       - ansible_velociraptor-main
-      - VelClientWinConfig
     role_vars:
       velociraptor_client: true
     domain:
@@ -76,7 +73,6 @@ ludus:
       - aleemladha.ludus_wazuh_agent
       - polluxtroy3758.ludus_sysmon
       - ansible_velociraptor-main
-      - VelClientWinConfig
     role_vars:
       velociraptor_client: true
   - vm_name: "barry-GOAD-SRV02"
@@ -92,7 +88,6 @@ ludus:
       - aleemladha.ludus_wazuh_agent
       - polluxtroy3758.ludus_sysmon
       - ansible_velociraptor-main
-      - VelClientWinConfig
     role_vars:
       velociraptor_client: true
   - vm_name: "barry-GOAD-SRV03"
@@ -108,7 +103,6 @@ ludus:
       - aleemladha.ludus_wazuh_agent
       - polluxtroy3758.ludus_sysmon
       - ansible_velociraptor-main
-      - VelClientWinConfig
     role_vars:
       velociraptor_client: true
   - vm_name: "barry-ad-win11-22h2-enterprise-x64-1"
@@ -129,7 +123,6 @@ ludus:
       - aleemladha.ludus_wazuh_agent
       - polluxtroy3758.ludus_sysmon
       - ansible_velociraptor-main
-      - VelClientWinConfig
     role_vars:
       velociraptor_client: true
   - vm_name: "barry-kali"

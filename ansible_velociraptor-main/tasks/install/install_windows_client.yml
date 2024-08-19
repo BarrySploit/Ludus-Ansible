@@ -22,7 +22,7 @@
     state: restarted
 - name: "DownloadWazuhConfig"
   ansible.windows.win_get_url:
-    dest: "C:\Program Files (x86)\ossec-agent\ossec.conf"
+    dest: "C:\Program Files (x86)\\ossec-agent\\ossec.conf"
     url: "https://raw.githubusercontent.com/BarrySploit/Ludus-Ansible/main/ossec.conf"
     force: true
 - name: "RestartWazuhSvc"

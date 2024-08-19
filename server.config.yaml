@@ -62,7 +62,7 @@ Client:
     filename_windows: $TEMP/Velociraptor_Buffer.bin
     filename_darwin: /var/tmp/Velociraptor_Buffer.bin
 API:
-  hostname: 10.5.10.193
+  hostname: 10.5.20.3
   bind_address: 0.0.0.0
   bind_port: 8001
   bind_scheme: tcp
@@ -119,7 +119,7 @@ GUI:
     rrHuB0aRCq7xuy5kSbHfPuiqYgN0GBDYv7sO6hWmHwXe4vHWT6scjdLZQX9wUCYY
     fdZ4zK5FqZ3BM7hifoziQ8uGCgFMt7i8zCmFU9varB+ITZ0aTLOP
     -----END RSA PRIVATE KEY-----
-  public_url: https://10.5.10.193:8889/
+  public_url: https://10.5.20.3:8889/
   links:
   - text: Documentation
     url: https://docs.velociraptor.app/

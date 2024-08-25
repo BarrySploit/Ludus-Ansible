@@ -57,9 +57,6 @@ ludus:
       - ansible_velociraptor-main
     role_vars:
       velociraptor_client: true
-    domain:
-      fqdn: north.sevenkingdoms.local
-      role: primary-dc
   - vm_name: "barry-GOAD-DC03"
     hostname: "barry-DC03"
     template: win2016-server-x64-template
@@ -105,20 +102,17 @@ ludus:
       - ansible_velociraptor-main
     role_vars:
       velociraptor_client: true
-  - vm_name: "barry-ad-win11-22h2-enterprise-x64-1"
-    hostname: "barry-WIN11-22H2-1"
+  - vm_name: "barry-GOAD-WS01"
+    hostname: "barry-GOAD-WS01"
     template: win11-22h2-x64-enterprise-template
     vlan: 10
-    ip_last_octet: 21
+    ip_last_octet: 30
     ram_gb: 8
     cpus: 4
     windows:
       install_additional_tools: true
       office_version: 2019
       office_arch: 64bit
-    domain:
-      fqdn: north.sevenkingdoms.local
-      role: member
     roles:
       - aleemladha.ludus_wazuh_agent
       - polluxtroy3758.ludus_sysmon

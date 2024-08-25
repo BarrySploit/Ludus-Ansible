@@ -2,6 +2,8 @@
 Contains ansible playbooks for Ludus range configuration
 
 range3.yaml = range configuration file (Set with the following command: ludus.exe range config set -f range3.yaml)
+ossec.conf = Updated Wazuh Config with Sysmon forwarding
+inventory.yaml = Ansible playbook inventory file for GOAD deployment. NOT DEFAULT, adds WS01 host.
 
 Must download the ansible_velociraptor folder, unzip and add as a role via (ludus.exe ansible role add -d ansible_velociraptor-main)
 

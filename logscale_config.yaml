@@ -1,0 +1,28 @@
+## This is YAML, so structure and indentation is important.
+## Lines can be uncommented by removing the #. You should not need to change the number of spaces after that.
+## Config options have a single #, comments have a ##. Only uncomment the single # lines if you need them.
+#####
+
+sources:
+  windowsEvents:
+    type: wineventlog
+    sink: logscaleSink
+    channels:
+      # Collect all from ForwardedEvents except EventID 900 and 903
+      # Collect EventID's 4624, 4634 and 4672 from Security
+      - name: Security
+      # Collect all events from System/Microsoft-Windows-NLB with level 1 and 2
+      - name: System
+      # Collect from Application using a XPath query
+      - name: Application
+      - name: "Windows Powershell"
+      - name: "Microsoft-Windows-PowerShell/Operational"
+      - name: "Microsoft-Windows-Sysmon/Operational"
+sinks:
+  logscaleSink:
+    type: logscale
+    token: b64609ab-ff1b-4264-8535-fe46effb32bb
+    ## Replace with the "Ingest URL" on the FLC download page. It must include the "https://" at the beginning.
+    url: http://10.5.10.99:8080/api/v1/ingest/humio-unstructured
+    tls:
+      insecure: true
